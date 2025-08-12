@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Empleado - Control Horario</title>
+    <meta name="description" content="Dashboard del empleado para control horario y vacaciones">
+    <meta name="keywords" content="dashboard empleado, control horario, vacaciones">
+    <meta property="og:title" content="Dashboard Empleado">
+    <meta property="og:description" content="Panel de control para empleados">
+    <meta name="twitter:title" content="Dashboard Empleado">
+    <meta name="twitter:description" content="Panel de control para empleados">
+
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/react@18/umd/react.production.min.js"></script>
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://resource.trickle.so/vendor_lib/unpkg/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
+    <link href="https://resource.trickle.so/vendor_lib/unpkg/lucide-static@0.516.0/font/lucide.css" rel="stylesheet">
+
+    <style type="text/tailwindcss">
+    @layer theme {
+        :root {
+            --primary-color: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+        }
+    }
+
+    @layer base {
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+    }
+
+    @layer components {
+        .btn-primary {
+            @apply bg-[var(--primary-color)] hover:bg-[var(--primary-dark)] text-white px-4 py-2 rounded-lg font-medium transition-colors;
+        }
+        
+        .btn-secondary {
+            @apply bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium transition-colors;
+        }
+        
+        .btn-success {
+            @apply bg-[var(--success-color)] hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors;
+        }
+        
+        .btn-danger {
+            @apply bg-[var(--danger-color)] hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors;
+        }
+        
+        .input-field {
+            @apply w-full px-3 py-2 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] outline-none;
+        }
+        
+        .card {
+            @apply bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg p-6 shadow-sm;
+        }
+        
+        .stat-card {
+            @apply bg-gradient-to-r p-6 rounded-lg text-white shadow-lg;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel" src="components/Header.js"></script>
+    <script type="text/babel" src="components/StatsCards.js"></script>
+    <script type="text/babel" src="components/TimeEntryForm.js"></script>
+    <script type="text/babel" src="components/VacationRequestForm.js"></script>
+    <script type="text/babel" src="components/Calendar.js"></script>
+    <script type="text/babel" src="components/Documents.js"></script>
+    <script type="text/babel" src="utils/auth.js"></script>
+    <script type="text/babel" src="utils/timeUtils.js"></script>
+    <script type="text/babel" src="utils/emailService.js"></script>
+    <script type="text/babel" src="employee-dashboard-app.js"></script>
+</body>
+</html>

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Guía Completa: Migrar Sistema de Control Horario a Servidor Propio</title>
+    <style>
+        body {
+            font-family: 'Calibri', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 40px;
+            color: #333;
+        }
+        h1 {
+            color: #2c5aa0;
+            border-bottom: 3px solid #2c5aa0;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2c5aa0;
+            margin-top: 30px;
+            border-left: 5px solid #2c5aa0;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #4a4a4a;
+            margin-top: 25px;
+        }
+        .important {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .code {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        .step {
+            background-color: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .warning {
+            background-color: #ffebee;
+            border: 1px solid #f44336;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .success {
+            background-color: #e8f5e8;
+            border: 1px solid #4caf50;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        ol, ul {
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .toc {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .budget-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        .budget-table th, .budget-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .budget-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<h1>📋 Guía Completa: Migrar Sistema de Control Horario a Servidor Propio</h1>
+
+<div class="toc">
+<h2>📑 Índice de Contenidos</h2>
+<ol>
+    <li><a href="#introduccion">¿Qué vamos a hacer?</a></li>
+    <li><a href="#preparar-computadora">Preparar tu Computadora</a></li>
+    <li><a href="#estructura-servidor">Crear la Estructura del Servidor</a></li>
+    <li><a href="#base-datos">Configurar la Base de Datos</a></li>
+    <li><a href="#gmail">Configurar Gmail para Correos</a></li>
+    <li><a href="#configurar-servidor">Configurar el Servidor</a></li>
+    <li><a href="#migrar-codigo">Migrar el Código del Cliente</a></li>
+    <li><a href="#probar-sistema">Probar el Sistema</a></li>
+    <li><a href="#subir-internet">Subir a Internet</a></li>
+    <li><a href="#dominio">Configurar Dominio Propio</a></li>
+    <li><a href="#https">Configurar HTTPS</a></li>
+    <li><a href="#problemas">Solución de Problemas</a></li>
+    <li><a href="#presupuesto">Presupuesto y Tiempo</a></li>
+</ol>
+</div>
+
+<h2 id="introduccion">🎯 ¿Qué vamos a hacer?</h2>
+
+<div class="step">
+Actualmente tu sistema funciona en Trickle (como una demo). Vamos a moverlo a tu propio servidor para que sea completamente tuyo y puedas enviar correos reales usando Gmail.
+
+<strong>Beneficios de tener tu propio servidor:</strong>
+<ul>
+    <li>✅ Control total del sistema</li>
+    <li>✅ Correos reales con Gmail</li>
+    <li>✅ Sin límites de usuarios</li>
+    <li>✅ Datos seguros en tu servidor</li>
+    <li>✅ Dominio personalizado</li>
+</ul>
+</div>
+
+<h2 id="preparar-computadora">💻 Paso 1: Preparar tu Computadora</h2>
+
+<h3>1.1 Instalar Node.js</h3>
+<div class="step">
+<ol>
+    <li>Ve a <strong>https://nodejs.org</strong></li>
+    <li>Descarga la versión <strong>"LTS"</strong> (la recomendada)</li>
+    <li>Ejecuta el archivo descargado y sigue las instrucciones</li>
+    <li>Para verificar que se instaló:
+        <ul>
+            <li>Abre "Símbolo del sistema" (Windows) o "Terminal" (Mac)</li>
+            <li>Escribe: <code>node --version</code></li>
+            <li>Debe mostrar un número como "v18.17.0"</li>
+        </ul>
+    </li>
+</ol>
+</div>
+
+<h3>1.2 Instalar un Editor de Código</h3>
+<div class="step">
+<ol>
+    <li>Descarga <strong>Visual Studio Code</strong> desde https://code.visualstudio.com</li>
+    <li>Instálalo siguiendo las instrucciones</li>
+</ol>
+</div>
+
+<h2 id="estructura-servidor">🏗️ Paso 2: Crear la Estructura del Servidor</h2>
+
+<h3>2.1 Crear la Carpeta del Proyecto</h3>
+<div class="step">
+<ol>
+    <li>Crea una carpeta en tu escritorio llamada <strong>"sistema-horario"</strong></li>
+    <li>Abre Visual Studio Code</li>
+    <li>Ve a "Archivo" > "Abrir Carpeta" y selecciona "sistema-horario"</li>
+</ol>
+</div>
+
+<h3>2.2 Estructura de Archivos Necesaria</h3>
+<div class="code">
+sistema-horario/
+├── servidor/
+│   ├── package.json
+│   ├── server.js
+│   ├── .env
+│   ├── config/
+│   │   └── database.js
+│   ├── routes/
+│   │   ├── auth.js
+│   │   ├── users.js
+│   │   ├── timeEntries.js
+│   │   ├── vacations.js
+│   │   └── email.js
+│   ├── middleware/
+│   │   └── auth.js
+│   └── services/
+│       └── emailService.js
+├── cliente/
+│   ├── index.html
+│   ├── employee-dashboard.html
+│   ├── admin-dashboard.html
+│   ├── js/
+│   ├── css/
+│   └── components/
+└── base-datos/
+    └── init.sql
+</div>
+
+<h2 id="base-datos">🗄️ Paso 3: Configurar la Base de Datos</h2>
+
+<h3>3.1 Instalar MySQL</h3>
+<div class="step">
+<ol>
+    <li>Ve a <strong>https://dev.mysql.com/downloads/mysql/</strong></li>
+    <li>Descarga <strong>MySQL Community Server</strong></li>
+    <li>Durante la instalación:
+        <ul>
+            <li>Elige "Custom" (personalizada)</li>
+            <li>Instala solo "MySQL Server" y "MySQL Workbench"</li>
+            <li>Crea una contraseña para el usuario "root" <strong>(¡APÚNTALA!)</strong></li>
+        </ul>
+    </li>
+</ol>
+</div>
+
+<h3>3.2 Crear la Base de Datos</h3>
+<div class="step">
+<ol>
+    <li>Abre <strong>MySQL Workbench</strong></li>
+    <li>Conecta con usuario "root" y tu contraseña</li>
+    <li>Crea una nueva base de datos llamada "control_horario"</li>
+    <li>Ejecuta este script SQL:</li>
+</ol>
+</div>
+
+<div class="code">
+CREATE DATABASE control_horario;
+USE control_horario;
+
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    role ENUM('employee', 'admin') NOT NULL,
+    department VARCHAR(255),
+    vacation_days INT DEFAULT 22,
+    hire_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE time_entries (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    date DATE NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    break_minutes INT DEFAULT 0,
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE vacation_requests (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    days_requested INT NOT NULL,
+    reason TEXT,
+    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    approved_by INT,
+    approved_at TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (approved_by) REFERENCES users(id)
+);
+
+CREATE TABLE documents (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    document_type ENUM('payroll', 'contract', 'other') NOT NULL,
+    file_name VARCHAR(255) NOT NULL,
+    file_path VARCHAR(500) NOT NULL,
+    month_year VARCHAR(7),
+    folder VARCHAR(255),
+    upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    uploaded_by INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (uploaded_by) REFERENCES users(id)
+);
+
+-- Insertar usuarios de prueba
+INSERT INTO users (email, password, name, role, department, vacation_days, hire_date) VALUES
+('admin@empresa.com', 'admin123', 'Administrador', 'admin', 'Recursos Humanos', 0, '2020-01-01'),
+('empleado@empresa.com', 'empleado123', 'Juan Pérez', 'employee', 'Desarrollo', 22, '2022-03-15');
+</div>
+
+<h2 id="gmail">📧 Paso 4: Configurar Gmail para Envío de Correos</h2>
+
+<h3>4.1 Preparar tu Cuenta de Gmail</h3>
+<div class="step">
+<ol>
+    <li>Ve a tu cuenta de Gmail</li>
+    <li>Haz clic en tu foto de perfil (esquina superior derecha)</li>
+    <li>Selecciona <strong>"Gestionar tu cuenta de Google"</strong></li>
+    <li>Ve a <strong>"Seguridad"</strong> en el menú lateral</li>
+    <li>Busca <strong>"Verificación en 2 pasos"</strong> y actívala si no está activa</li>
+    <li>Una vez activada, busca <strong>"Contraseñas de aplicaciones"</strong></li>
+    <li>Selecciona "Correo" y "Otro" (escribe "Sistema Horario")</li>
+    <li>Google te dará una contraseña de 16 caracteres <strong>(¡GUÁRDALA!)</strong></li>
+</ol>
+</div>
+
+<div class="important">
+<strong>🔑 Datos Importantes a Anotar:</strong>
+<ul>
+    <li><strong>Tu correo de Gmail:</strong> ejemplo@gmail.com</li>
+    <li><strong>Contraseña de aplicación:</strong> (la de 16 caracteres)</li>
+    <li><strong>Servidor SMTP:</strong> smtp.gmail.com</li>
+    <li><strong>Puerto:</strong> 587</li>
+</ul>
+</div>
+
+<h2 id="configurar-servidor">⚙️ Paso 5: Configurar el Servidor</h2>
+
+<h3>5.1 Crear package.json</h3>
+<div class="step">
+En la carpeta "servidor", crea un archivo llamado <code>package.json</code>:
+</div>
+
+<div class="code">
+{
+  "name": "sistema-control-horario",
+  "version": "1.0.0",
+  "description": "Sistema de control horario y vacaciones",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.6.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.4",
+    "cors": "^2.8.5",
+    "multer": "^1.4.5",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
+</div>
+
+<h3>5.2 Instalar Dependencias</h3>
+<div class="step">
+<ol>
+    <li>Abre la terminal en Visual Studio Code (Terminal > Nueva Terminal)</li>
+    <li>Navega a la carpeta servidor: <code>cd servidor</code></li>
+    <li>Ejecuta: <code>npm install</code></li>
+    <li>Espera a que termine (puede tomar unos minutos)</li>
+</ol>
+</div>
+
+<h3>5.3 Crear Archivo de Configuración</h3>
+<div class="step">
+En la carpeta "servidor", crea un archivo llamado <code>.env</code>:
+</div>
+
+<div class="code">
+# Base de datos
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=tu_contraseña_mysql_aqui
+DB_NAME=control_horario
+
+# JWT (para seguridad)
+JWT_SECRET=mi_clave_super_secreta_123456
+
+# Configuración de correo Gmail
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=tu_email@gmail.com
+EMAIL_PASS=tu_contraseña_de_aplicacion_16_caracteres
+EMAIL_FROM=tu_email@gmail.com
+
+# Puerto del servidor
+PORT=3000
+</div>
+
+<div class="warning">
+<strong>⚠️ ¡IMPORTANTE!</strong> Reemplaza:
+<ul>
+    <li><code>tu_contraseña_mysql_aqui</code> con la contraseña de MySQL</li>
+    <li><code>tu_email@gmail.com</code> con tu correo de Gmail</li>
+    <li><code>tu_contraseña_de_aplicacion_16_caracteres</code> con la contraseña de aplicación</li>
+</ul>
+</div>
+
+<h2 id="migrar-codigo">🔄 Paso 6: Migrar el Código del Cliente</h2>
+
+<h3>6.1 Copiar Archivos</h3>
+<div class="step">
+<ol>
+    <li>Copia todos los archivos <code>.html</code> de tu proyecto actual a la carpeta "cliente"</li>
+    <li>Copia todos los archivos <code>.js</code> a la carpeta "cliente/js"</li>
+    <li>Copia todos los archivos <code>.css</code> a la carpeta "cliente/css"</li>
+</ol>
+</div>
+
+<h3>6.2 Actualizar las URLs</h3>
+<div class="step">
+En todos los archivos JavaScript, cambia las llamadas a la base de datos:
+</div>
+
+<div class="code">
+<strong>ANTES:</strong>
+await trickleCreateObject('user', userData);
+
+<strong>DESPUÉS:</strong>
+await fetch('http://localhost:3000/api/users', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+    },
+    body: JSON.stringify(userData)
+});
+</div>
+
+<h2 id="probar-sistema">🧪 Paso 7: Probar el Sistema</h2>
+
+<h3>7.1 Iniciar el Servidor</h3>
+<div class="step">
+<ol>
+    <li>En la terminal, ve a la carpeta servidor: <code>cd servidor</code></li>
+    <li>Ejecuta: <code>npm start</code></li>
+    <li>Deberías ver: <strong>"Servidor corriendo en puerto 3000"</strong></li>
+</ol>
+</div>
+
+<h3>7.2 Abrir el Sistema</h3>
+<div class="step">
+<ol>
+    <li>Abre tu navegador</li>
+    <li>Ve a: <strong>http://localhost:3000</strong></li>
+    <li>Deberías ver tu sistema funcionando</li>
+</ol>
+</div>
+
+<h3>7.3 Probar Correos</h3>
+<div class="step">
+<ol>
+    <li>Crea una solicitud de vacaciones</li>
+    <li>Revisa tu correo Gmail</li>
+    <li>Deberías recibir la notificación</li>
+</ol>
+</div>
+
+<h2 id="subir-internet">🌐 Paso 8: Subir a un Servidor en Internet</h2>
+
+<h3>8.1 Opciones de Hosting</h3>
+
+<div class="step">
+<strong>Opción A: DigitalOcean (Recomendado)</strong>
+<ul>
+    <li>💰 Costo: $5-10 USD/mes</li>
+    <li>✅ Más control y rendimiento</li>
+    <li>🎯 Ideal para empresas</li>
+</ul>
+
+<strong>Opción B: Heroku (Más Fácil)</strong>
+<ul>
+    <li>💰 Costo: $7 USD/mes</li>
+    <li>✅ Más fácil de configurar</li>
+    <li>🎯 Ideal para principiantes</li>
+</ul>
+</div>
+
+<h3>8.2 Pasos para DigitalOcean</h3>
+<div class="step">
+<ol>
+    <li>Crea cuenta en <strong>digitalocean.com</strong></li>
+    <li>Crea un "Droplet" (servidor virtual)</li>
+    <li>Elige <strong>Ubuntu 22.04</strong></li>
+    <li>Conecta por SSH</li>
+    <li>Instala Node.js y MySQL</li>
+    <li>Sube tu código</li>
+    <li>Configura el dominio</li>
+</ol>
+</div>
+
+<h2 id="dominio">🌍 Paso 9: Configurar Dominio Propio</h2>
+
+<h3>9.1 Comprar Dominio</h3>
+<div class="step">
+<ol>
+    <li>Ve a <strong>namecheap.com</strong> o <strong>godaddy.com</strong></li>
+    <li>Busca un dominio (ejemplo: miempresa-horario.com)</li>
+    <li>Cómpralo (cuesta unos $10-15 USD/año)</li>
+</ol>
+</div>
+
+<h3>9.2 Configurar DNS</h3>
+<div class="step">
+<ol>
+    <li>En el panel de tu dominio, configura los DNS</li>
+    <li>Apunta el dominio a la IP de tu servidor</li>
+    <li>Espera 24-48 horas para que se propague</li>
+</ol>
+</div>
+
+<h2 id="https">🔒 Paso 10: Configurar HTTPS (Seguridad)</h2>
+
+<h3>10.1 Instalar Certificado SSL</h3>
+<div class="step">
+<ol>
+    <li>Usa <strong>Let's Encrypt</strong> (gratuito)</li>
+    <li>En tu servidor, ejecuta:</li>
+</ol>
+</div>
+
+<div class="code">
+sudo apt install certbot
+sudo certbot --nginx -d tudominio.com
+</div>
+
+<h2 id="problemas">🔧 Solución de Problemas Comunes</h2>
+
+<div class="warning">
+<h3>Problema: "Cannot connect to database"</h3>
+<strong>Solución:</strong> Verifica que MySQL esté corriendo y las credenciales sean correctas
+</div>
+
+<div class="warning">
+<h3>Problema: "Port 3000 already in use"</h3>
+<strong>Solución:</strong> Cambia el puerto en el archivo .env a 3001 o 8080
+</div>
+
+<div class="warning">
+<h3>Problema: "Gmail authentication failed"</h3>
+<strong>Solución:</strong> Verifica que tengas activada la verificación en 2 pasos y uses la contraseña de aplicación
+</div>
+
+<div class="warning">
+<h3>Problema: "Cannot find module"</h3>
+<strong>Solución:</strong> Ejecuta <code>npm install</code> en la carpeta servidor
+</div>
+
+<h2 id="presupuesto">💰 Presupuesto y Tiempo Estimado</h2>
+
+<h3>Presupuesto Mensual</h3>
+<table class="budget-table">
+    <tr>
+        <th>Concepto</th>
+        <th>Costo</th>
+        <th>Frecuencia</th>
+    </tr>
+    <tr>
+        <td>Servidor DigitalOcean</td>
+        <td>$5-10 USD</td>
+        <td>Mensual</td>
+    </tr>
+    <tr>
+        <td>Dominio</td>
+        <td>$10-15 USD</td>
+        <td>Anual</td>
+    </tr>
+    <tr>
+        <td>Certificado SSL</td>
+        <td>Gratis</td>
+        <td>Let's Encrypt</td>
+    </tr>
+    <tr>
+        <td><strong>Total mensual</strong></td>
+        <td><strong>$6-11 USD</strong></td>
+        <td></td>
+    </tr>
+</table>
+
+<h3>Tiempo Estimado</h3>
+<div class="success">
+<ul>
+    <li>⏱️ <strong>Configuración inicial:</strong> 4-6 horas</li>
+    <li>⏱️ <strong>Migración del código:</strong> 2-3 horas</li>
+    <li>⏱️ <strong>Configuración del servidor:</strong> 2-4 horas</li>
+    <li>⏱️ <strong>Total:</strong> 8-13 horas</li>
+</ul>
+</div>
+
+<h2>🆘 Contacto para Ayuda</h2>
+
+<div class="step">
+Si necesitas ayuda adicional, puedes:
+<ol>
+    <li><strong>Contratar un desarrollador freelance</strong> (costo: $200-500 USD)</li>
+    <li><strong>Usar servicios de migración de hosting</strong></li>
+    <li><strong>Seguir tutoriales en YouTube</strong> sobre "deploy Node.js application"</li>
+    <li><strong>Contactar soporte técnico</strong> de tu proveedor de hosting</li>
+</ol>
+</div>
+
+<div class="important">
+<strong>📋 Lista de Verificación Final:</strong>
+<ul>
+    <li>☐ Node.js instalado</li>
+    <li>☐ MySQL configurado</li>
+    <li>☐ Gmail configurado con contraseña de aplicación</li>
+    <li>☐ Servidor funcionando localmente</li>
+    <li>☐ Código migrado y probado</li>
+    <li>☐ Hosting contratado</li>
+    <li>☐ Dominio configurado</li>
+    <li>☐ SSL activado</li>
+</ul>
+</div>
+
+<div class="warning">
+<strong>⚠️ Recordatorio Importante:</strong><br>
+¡Recuerda hacer copias de seguridad de todo antes de empezar!
+</div>
+
+<hr>
+<p style="text-align: center; color: #666; margin-top: 40px;">
+<em>Documento generado el 8 de enero de 2025<br>
+Sistema de Control Horario - Guía de Migración Completa</em>
+</p>
+
+</body>
+</html>
